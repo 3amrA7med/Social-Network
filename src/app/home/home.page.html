@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-title>
+      Social Network
+    </ion-title>
+    <ion-buttons slot="end" >
+      <ion-button (click)="clearNotifcation()" color="primary">Notifications({{newNotifications.count}})</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-card>
+      <div>
+        <ion-item>
+          <ion-input (keydown.enter)="submit()" [(ngModel)]="postValue" type="text" placeholder="What's on your mind"></ion-input>
+        </ion-item>
+      </div>
+      <ion-item class="ion-activated">
+          <ion-button  (click)="submit() ">Post</ion-button>
+      </ion-item>
+    </ion-card>
+  <ion-card>
+    <ion-item>
+      <ion-icon name="pin" slot="start"></ion-icon>
+      <ion-label>Newsfeed</ion-label>
+    </ion-item>
+  </ion-card>
+  
+  <ion-card *ngFor="let post of posts"> 
+    <ion-list>
+      <ion-list-header>
+          <h1><ion-icon name="person-circle" ></ion-icon><strong>Post </strong></h1>
+      </ion-list-header>
+      <ion-item>
+        <h1>{{post.value}}</h1>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngIf="post.replies">
+      <ion-list-header>
+        <h1><strong>Replies</strong></h1>
+      </ion-list-header>
+      <ion-item style="margin-left:10px ;"*ngFor="let reply of post.replies">
+        {{reply}}
+      </ion-item>
+    </ion-list>
+    <ion-item *ngIf="addReply && addReplyPostId == post.id">
+      <ion-input (keydown.enter)="reply(post)" [(ngModel)]="replyValue" type="text" placeholder="Type your reply here .."></ion-input>
+    </ion-item>
+    <ion-item class="ion-activated">
+      <ion-button (click)="toggleReplyField(post.id)" *ngIf="addReplyPostId != post.id">Add Reply</ion-button>
+      <ion-button (click)="toggleReplyField(post.id)" *ngIf="addReply && addReplyPostId == post.id">Cancel</ion-button>
+      <ion-button (click)="reply(post)" *ngIf="addReply && addReplyPostId == post.id"> <ion-icon name="send-outline" ></ion-icon>Reply</ion-button>
+      <ion-button (click)="delete(post)"><ion-icon name="trash-outline" >     </ion-icon>Delete</ion-button>
+      <ion-button (click)="like(post)">  <ion-icon name="thumbs-up-outline" > </ion-icon>Like({{post.likes}})</ion-button>
+    </ion-item>
+  </ion-card>
+</ion-content>
+
+<!--
+  *ngFor="let reply of post.replies"
+    <strong>Ready to create an app?</strong>
+    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>-->
